@@ -1,11 +1,11 @@
 import requests
 import json
 
-class stats():
-    def __init__(self, name, level, time):
+class baseInfo():
+    def __init__(self, name, level, pid):
         self.name = name
         self.level = level
-        self.time = time
+        self.pid = pid
 
 class kills():
     def __init__(self, killsTotal,
@@ -22,6 +22,11 @@ class kills():
         self.killsSkill = killsSkill
         self.killsTurret = killsTurret
 
+    def array(self):
+        return [self.killsTotal, self.killsBleeding, self.killsShocked,
+                self.killsBurning, self.killsEnsnare, self.killsHeadshots, self.killsSkill,
+                self.killsTurret]
+
 class weaponKills():
     def __init__(self, pistolKills,
     grenadeKills, smgKills,
@@ -37,9 +42,9 @@ class weaponKills():
 def getBaseInfo(userName):
     r1 = requests.get('https://thedivisiontab.com/api/search.php?name='+userName+'&platform=uplay')
     data = json.loads(r1.text)
-    return data
+    return data['results'][0]
 
-def getAdvancedStates(pid):
+def getAdvancedStats(pid):
     r2 = requests.get('https://thedivisiontab.com/api/player.php?pid='+pid)
     data = json.loads(r2.text)
     return data
